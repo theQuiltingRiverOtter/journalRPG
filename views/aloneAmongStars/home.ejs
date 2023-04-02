@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/js/materialize.min.js"></script>
+    <script src="/js/getPlanet2.js"></script>
+    <title>Alone Among the Stars</title>
+    <style>
+        body {
+            height: 100vh;
+
+        }
+
+        .flex {
+            display: flex;
+            flex-wrap: wrap;
+            min-height: 88vh;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">Alone</a>
+            <form action='/:game/entries/new' method="post" class=" right hide-on-med-and-down" id="form1">
+                <div class="input-field" style="max-width: 400pt;">
+                    <input id="search" type="search" name="name" required onkeyup="getBlogs(this.value,0);">
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                    <div id="searchResults"></div>
+                </div>
+            </form>
+            <ul class="hide-on-med-and-down">
+                <li><a href="/log-in">Log-in/Sign-up</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="">RPGs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="row flex">
+        <div class="col s2 indigo darken-4 grey-text text-lighten-3 sidebar">
+            <ul>
+
+                <% for (let e in entries) { %>
+                    <li><b>
+                            <a href="/aloneAmongStars/entries/showPlanet/<%=e%>">
+                                <%= e%>
+                            </a>
+                        </b>
+                        <ul>
+                            <% for (let log of entries[e]){ %>
+                                <li>
+                                    <% if (log.text.length> 100) { %>
+                                        <%= log.date %> : <%= log.text.slice(0,100) %>
+                                                <% } else { %>
+                                                    <%= log.date %> : <%= log.text %>
+
+                                                            <% }%>
+
+                                                                <% } %>
+                                </li>
+                        </ul>
+                    </li>
+                    <br>
+                    <% } %>
+            </ul>
+            <div>
+                <a href="/aloneAmongStars/entries">See all planets</a>
+            </div>
+        </div>
+
+
+
+
+        <div class="col s9 offset-s1">
+
+            <div class="opening">
+                <h1>Alone Among the Stars</h1>
+                <p id="background">You are a solitary adventurer, hopping from planet to planet exploring. Each
+                    world
+                    has unique features for you to discover and record.</p>
+                <div class="row" id="card-container">
+
+
+                </div>
+
+                <div class="row">
+                    <form action="/aloneAmongStars/entries/new" method='get' class="col s12">
+                        <button type="submit" name="action" class="waves-effect waves-light btn">Get
+                            Planet</button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

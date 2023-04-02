@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/js/materialize.min.js"></script>
+    <script src="/js/getPlanet2.js"></script>
+    <title>Alone Among the Stars</title>
+    <style>
+        body {
+            height: 100vh;
+
+        }
+
+        .flex {
+            display: flex;
+            flex-wrap: wrap;
+            min-height: 88vh;
+        }
+
+        .new-card {
+            background-image: url("/images/moon-card.jpg");
+            width: 200px;
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">Alone</a>
+            <form action='/:game/entries/new' method="post" class=" right hide-on-med-and-down" id="form1">
+                <div class="input-field" style="max-width: 400pt;">
+                    <input id="search" type="search" name="name" required onkeyup="getBlogs(this.value,0);">
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                    <div id="searchResults"></div>
+                </div>
+            </form>
+            <ul class="hide-on-med-and-down">
+                <li><a href="/log-in">Log-in/Sign-up</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="">RPGs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="row flex">
+        <div class="col s2 indigo darken-4 grey-text text-lighten-3 sidebar">
+            <ul>
+
+                <% for (let e in entries) { %>
+                    <li><b>
+                            <a href="/aloneAmongStars/entries/showPlanet/<%=e%>">
+                                <%= e%>
+                            </a>
+                        </b>
+                        <ul>
+                            <% for (let log of entries[e]){ %>
+                                <li>
+                                    <% if (log.text.length> 100) { %>
+                                        <%= log.date %> : <%= log.text.slice(0,100) %>
+                                                <% } else { %>
+                                                    <%= log.date %> : <%= log.text %>
+
+                                                            <% }%>
+
+                                                                <% } %>
+                                </li>
+                        </ul>
+                    </li>
+                    <br>
+                    <% } %>
+            </ul>
+            <div>
+                <a href="/aloneAmongStars/entries">See all planets</a>
+            </div>
+        </div>
+
+
+
+        <div class="col s9 offset-s1">
+
+            <div class="opening">
+                <h1>Alone Among the Stars</h1>
+                <p id="background">You are a solitary adventurer, hopping from planet to planet exploring. Each
+                    world
+                    has unique features for you to discover and record.</p>
+                <div class="row" id="card-container">
+                    <% for (let i=planetFeatures.length -1; i>= 0; i--) { %>
+                        <% let item=planetFeatures[i]; %>
+                            <div id=" wrapper" class="col s3">
+                                <div class="z-depth-5" id="feature">
+                                    <div class="card small nextCard">
+                                        <div class="card-image">
+
+                                            <img src="<%=item.locationImage %>" alt=" glacier">
+                                            <span class="card-title">
+                                                <%=item.location %>
+                                            </span>
+                                        </div>
+                                        <div class="card-content">
+                                            <p>
+                                                <%= item.discovered %>
+                                            </p>
+                                            <span class="activator grey-text text-darken-4">
+                                                <%= item.feature[0] %> <i class="material-icons right">more_vert</i>
+                                            </span>
+
+                                        </div>
+                                        <div class="card-reveal">
+                                            <span class="card-title grey-text text-darken-4">
+                                                <%= item.feature[0] %>
+                                            </span>
+                                            <p>
+                                                <%= item.feature[1] %>
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <% }%>
+
+                </div>
+
+
+
+
+
+
+                <div class="row">
+
+                    <button type="button" class="waves-effect waves-light btn">Get
+                        Planet</button>
+
+
+
+                </div>
+                <div class="row">
+                    <form action="/aloneAmongStars/entries/new" method='post' class="col s12">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <label for="planet-name">Enter the name of the planet.</label>
+                                <input type="text" name="planetName" placeholder="<%=planetFeatures[0].planetName %>"
+                                    class='validate' value="<%=planetFeatures[0].planetName %>" id="planetName">
+                            </div>
+
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">mode_edit</i>
+                                <textarea name="shipsLog" id="shipsLog" class="materialize-textarea"></textarea>
+                                <label for="ships-log">Ship's Log</label>
+                                <button class="btn-floating btn-large waves-effect waves-light" type="submit"
+                                    name="action">
+                                    <i class="material-icons">add</i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+</body>
+
+</html>

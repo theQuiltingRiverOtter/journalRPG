@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/js/materialize.min.js"></script>
+    <title>Alone Among the Stars</title>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">Alone</a>
+            <form action='/:game/entries/new' method="post" class=" right hide-on-med-and-down" id="form1">
+                <div class="input-field" style="max-width: 400pt;">
+                    <input id="search" type="search" name="name" required onkeyup="getBlogs(this.value,0);">
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                    <div id="searchResults"></div>
+                </div>
+            </form>
+            <ul class="hide-on-med-and-down">
+                <li><a href="/log-in">Log-in/Sign-up</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="">RPGs</a></li>
+            </ul>
+        </div>
+    </nav>
+    <h1>Alone Among the Stars</h1>
+
+
+
+    <div>
+        <h2>
+            Editing - <%= planet %> : <%= specificEntry.id %>
+        </h2>
+        <p>
+            <%= specificEntry.planetName %>
+        </p>
+        <form action="/aloneAmongStars/entries/showID/<%=id%>?_method=PATCH" method="post">
+            <textarea name="shipsLog" id="shipsLog" cols="30" rows="10">
+                <%= specificEntry.text %>
+
+            </textarea>
+            <button>Save</button>
+        </form>
+        <p>
+            <%= specificEntry.date %>
+        </p>
+        <p>
+            <%= specificEntry.text %>
+        </p>
+    </div>
+
+</body>
+
+</html>

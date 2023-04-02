@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/materialize.min.css">
+    <script src="/js/materialize.min.js"></script>
+    <title>Journaling RPGs</title>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">JRPG</a>
+            <form action='search' method="post" class=" right hide-on-med-and-down" id="form1">
+                <div class="input-field" style="max-width: 400pt;">
+                    <input id="search" type="search" name="name" required onkeyup="getBlogs(this.value,0);">
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                    <div id="searchResults"></div>
+                </div>
+            </form>
+            <ul class="hide-on-med-and-down">
+                <li><a href="/aloneAmongStars/entries">Alone</a></li>
+                <li><a href="/oneDayThyme/entries">oMaL</a></li>
+                <li><a href="/moonAndLeaf/entries">ODaT</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div>RPGs</div>
+    <ul>
+        <li><a href="/aloneAmongStars">Alone Among the Stars</a></li>
+        <li><a href="/oneDayThyme">One Day at a Thyme</a></li>
+        <li><a href="/moonAndLeaf">Of Moon and Leaf</a></li>
+    </ul>
+
+</body>
+
+</html>
