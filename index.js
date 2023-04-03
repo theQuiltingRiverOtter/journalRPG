@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require("path");
 const planet = require("./public/js/getPlanet2");
+const getDate = require("./public/js/getDate");
 const { v4: uuid } = require("uuid");
 const methodOverride = require("method-override");
 
@@ -13,20 +14,20 @@ app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.set("views", (path.join(__dirname, "/views")));
 
-
+const staticDate = new Date();
 const entries = {
     "Planet 385B": [
         {
             id: uuid(),
             captainName: "Megan",
             text: `Today I was walking through the jungle and I found a new plant. It was a carnivorous monster. `,
-            date: "12/14/2341"
+            date: getDate.getFutureDate(staticDate)
         },
         {
             id: uuid(),
             captainName: "Megan",
             text: " Today I found a ruin while I was exploring a grassy field",
-            date: "12/23/2341"
+            date: getDate.getFutureDate(staticDate)
         }
     ],
     "Planet 599D": [
@@ -34,13 +35,13 @@ const entries = {
             id: uuid(),
             captainName: "Megan",
             text: "Today I found a new animal while I was exploring the glacier",
-            date: "12/14/2341"
+            date: getDate.getFutureDate(staticDate)
         },
         {
             id: uuid(),
             captainName: "Megan",
             text: "Today I found a crystal while I was exploring a gentle river",
-            date: "12/23/2341"
+            date: getDate.getFutureDate(staticDate)
         }
     ]
 }
@@ -121,7 +122,7 @@ app.post("/:game/entries/new", (req, res) => {
         id: uuid(),
         captainName: "Megan",
         text: req.body.shipsLog,
-        date: `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear() + 300}`,
+        date: getDate.getFutureDate(date)
 
     }
     if (entries[`${req.body.planetName}`]) {
