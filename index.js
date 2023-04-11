@@ -3,8 +3,19 @@ const app = express();
 const path = require("path");
 const planet = require("./public/js/getPlanet2");
 const getDate = require("./public/js/getDate");
-const { v4: uuid } = require("uuid");
+const mongoose = require('mongoose');
+const Entry = require('./models/entry');
 const methodOverride = require("method-override");
+
+mongoose.connect('mongodb://127.0.0.1:27017/entryDB', { useNewUrlParser: true })
+    .then(() => {
+        console.log("mongo connection open");
+    })
+    .catch(err => {
+        console.log(`Oh no, mongo connection error: ${err}`);
+    })
+
+
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -14,87 +25,44 @@ app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.set("views", (path.join(__dirname, "/views")));
 
-const staticDate = new Date();
-const entries = {
-    "Planet 385B": [
-        {
-            id: uuid(),
-            captainName: "Megan",
-            text: `Today I was walking through the jungle and I found a new plant. It was a carnivorous monster. `,
-            date: getDate.getFutureDate(staticDate)
-        },
-        {
-            id: uuid(),
-            captainName: "Megan",
-            text: " Today I found a ruin while I was exploring a grassy field",
-            date: getDate.getFutureDate(staticDate)
-        }
-    ],
-    "Planet 599D": [
-        {
-            id: uuid(),
-            captainName: "Megan",
-            text: "Today I found a new animal while I was exploring the glacier",
-            date: getDate.getFutureDate(staticDate)
-        },
-        {
-            id: uuid(),
-            captainName: "Megan",
-            text: "Today I found a crystal while I was exploring a gentle river",
-            date: getDate.getFutureDate(staticDate)
-        }
-    ]
-}
 let planetFeatures = [];
 
 app.get("/", (req, res) => {
     res.render("home.ejs");
 })
 
-app.get("/:game", (req, res) => {
+app.get("/:game", async (req, res) => {
     const { game } = req.params;
+    const entries = await Entry.find({});
+    console.log(entries);
     res.render(`${game}/home`, { entries })
 })
 
-app.get("/:game/entries", (req, res) => {
+app.get("/:game/entries", async (req, res) => {
     const { game } = req.params;
+    const entries = await Entry.find({})
     res.render(`${game}/index`, { entries })
 })
 
-app.get("/:game/entries/new", (req, res) => {
+app.get("/:game/entries/new", async (req, res) => {
     const { game } = req.params;
     planetFeatures = planet.getPlanet();
+    const entries = await Entry.find({})
     res.render(`${game}/form`, { entries, planetFeatures });
 })
 
-app.get("/:game/entries/showID/:id", (req, res) => {
+app.get("/:game/entries/showID/:id", async (req, res) => {
     const { game, id } = req.params;
-    let specificEntry;
-    let planet;
-    for (let entry in entries) {
-        if (entries[entry].find(e => e.id == id)) {
-            planet = entry;
-            specificEntry = entries[entry].find(e => e.id == id);
-            break;
-        }
-    }
-    res.render(`${game}/showEntry`, { planet, specificEntry });
+    const entry = await Entry.findById(id);
+    res.render(`${game}/showEntry`, { planet, entry });
 })
 
-app.get("/:game/entries/editID/:id", (req, res) => {
+app.get("/:game/entries/editID/:id", async (req, res) => {
     const { game, id } = req.params;
-    let specificEntry;
-    let planet;
-    for (let entry in entries) {
-        if (entries[entry].find(e => e.id == id)) {
-            planet = entry;
-            specificEntry = entries[entry].find(e => e.id == id);
-            break;
-        }
-    }
-    res.render(`${game}/editEntry`, { planet, id, specificEntry });
+    const entry = await Entry.findById(id);
+    res.render(`${game}/editEntry`, { planet, id, entry });
 })
-
+/*
 app.patch("/:game/entries/showId/:id", (req, res) => {
     const { game, id } = req.params;
     for (let entry in entries) {
@@ -107,31 +75,31 @@ app.patch("/:game/entries/showId/:id", (req, res) => {
     res.redirect(`/${game}/entries`);
 })
 
-
-app.get("/:game/entries/showPlanet/:planetID", (req, res) => {
+*/
+app.get("/:game/entries/showPlanet/:planetID", async (req, res) => {
     const { game, planetID } = req.params;
-    let newPlanet = entries[planetID];
+    let newPlanet = await Entry.find({ planetName: planetID });
     res.render(`${game}/showPlanet`, { planetID, newPlanet })
 })
 
 
-app.post("/:game/entries/new", (req, res) => {
+app.post("/:game/entries/new", async (req, res) => {
     const { game } = req.params
     const date = new Date();
-    const entry = {
-        id: uuid(),
-        captainName: "Megan",
+    const entry = new Entry({
+        planetName: req.body.planetName,
         text: req.body.shipsLog,
         date: getDate.getFutureDate(date)
-
-    }
-    if (entries[`${req.body.planetName}`]) {
-        entries[`${req.body.planetName}`].push(entry);
-    } else {
-        entries[`${req.body.planetName}`] = [];
-        entries[`${req.body.planetName}`].push(entry);
-    }
+    })
+    entry.save()
+        .then(entry => {
+            console.log(entry);
+        })
+        .catch(err => {
+            console.log(err);
+        })
     planetFeatures.pop();
+    const entries = await Entry.find({});
     if (planetFeatures.length > 0) {
         res.render(`${game}/form`, { entries, planetFeatures })
     }

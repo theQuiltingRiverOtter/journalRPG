@@ -4,7 +4,7 @@ function defaultName() {
     let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     let randomNumber = Math.floor(Math.random() * 900) + 100;
     let randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-    return "Planet " + randomNumber + randomLetter;
+    return randomNumber + randomLetter;
 
 
 }

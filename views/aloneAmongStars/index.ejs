@@ -32,30 +32,19 @@
     </nav>
     <h1>Alone Among the Stars</h1>
     <ul>
-        <% for (let e in entries) {%>
-            <h2>
-                <a href="/aloneAmongStars/entries/showPlanet/<%=e%>">
-                    <%= e%>
-                </a>
 
-            </h2>
-            <% for (let log of entries[e]) { %>
-                <ul>
-                    <li>
-                        <%= log.captainName %>
-                    </li>
-                    <li>
-                        <%= log.date %>
-                    </li>
-                    <li>
-                        <%= log.text %>
-                    </li>
-                    <li><a href="/aloneAmongStars/entries/showID/<%=log.id%>">Details</a></li>
-                    <li><a href="/aloneAmongStars/entries/editID/<%=log.id%>">Edit</a></li>
-                </ul>
-                <% } %>
-
-                    <% } %>
+        <% for (let e of entries) { %>
+            <li><b>
+                    <a href="/aloneAmongStars/entries/showPlanet/<%=e.planetName%>">
+                        <%= e.planetName%>
+                    </a>
+                </b>
+            </li>
+            <li>
+                <%= e.date%>: <%= e.text %>
+            </li>
+            <br>
+            <% } %>
     </ul>
 </body>
 

@@ -55,25 +55,21 @@
         <div class="col s2 indigo darken-4 grey-text text-lighten-3 sidebar">
             <ul>
 
-                <% for (let e in entries) { %>
+                <% for (let e of entries) { %>
                     <li><b>
-                            <a href="/aloneAmongStars/entries/showPlanet/<%=e%>">
-                                <%= e%>
+                            <a href="/aloneAmongStars/entries/showPlanet/<%=e.planetName%>">
+                                <%= e.planetName%>
                             </a>
                         </b>
-                        <ul>
-                            <% for (let log of entries[e]){ %>
-                                <li>
-                                    <% if (log.text.length> 100) { %>
-                                        <%= log.date %> : <%= log.text.slice(0,100) %>
-                                                <% } else { %>
-                                                    <%= log.date %> : <%= log.text %>
+                    </li>
+                    <li>
+                        <%= e.date%>:
+                            <% if (e.text.length> 100) { %>
+                                <%= e.text.slice(0,100)%>
+                                    <% } else { %>
+                                        <%= e.text %>
 
-                                                            <% }%>
-
-                                                                <% } %>
-                                </li>
-                        </ul>
+                                            <% } %>
                     </li>
                     <br>
                     <% } %>
